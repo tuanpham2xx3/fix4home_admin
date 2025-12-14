@@ -18,6 +18,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu'
 import ArticleIcon from '@mui/icons-material/Article'
 import DashboardIcon from '@mui/icons-material/Dashboard'
+import ImageIcon from '@mui/icons-material/Image'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { authApi } from '@/api/auth'
 import toast from 'react-hot-toast'
@@ -27,6 +28,7 @@ const drawerWidth = 240
 const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { text: 'Articles', icon: <ArticleIcon />, path: '/articles' },
+  { text: 'Images', icon: <ImageIcon />, path: '/images' },
 ]
 
 export default function AdminLayout() {
@@ -104,7 +106,11 @@ export default function AdminLayout() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Article Management
+            {location.pathname.startsWith('/images') 
+              ? 'Image Management' 
+              : location.pathname.startsWith('/articles')
+              ? 'Article Management'
+              : 'Admin Dashboard'}
           </Typography>
         </Toolbar>
       </AppBar>

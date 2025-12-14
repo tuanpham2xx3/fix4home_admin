@@ -8,6 +8,7 @@ import Dashboard from '@/pages/Dashboard'
 import ArticleList from '@/pages/Articles/ArticleList'
 import ArticleCreate from '@/pages/Articles/ArticleCreate'
 import ArticleEdit from '@/pages/Articles/ArticleEdit'
+import Images from '@/pages/Images'
 
 const theme = createTheme({
   palette: {
@@ -41,6 +42,7 @@ function App() {
             <Route path="articles" element={<ArticleList />} />
             <Route path="articles/new" element={<ArticleCreate />} />
             <Route path="articles/:id/edit" element={<ArticleEdit />} />
+            <Route path="images" element={<Images />} />
           </Route>
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>

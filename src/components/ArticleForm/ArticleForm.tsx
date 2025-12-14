@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import * as yup from 'yup'
@@ -10,8 +10,14 @@ import {
   Paper,
   Typography,
   Stack,
+  Card,
+  CardMedia,
+  IconButton,
 } from '@mui/material'
+import DeleteIcon from '@mui/icons-material/Delete'
+import ImageIcon from '@mui/icons-material/Image'
 import RichTextEditor from './RichTextEditor'
+import ImagePickerDialog from '../ImageManager/ImagePickerDialog'
 import { CreateArticleRequest, UpdateArticleRequest, Article } from '@/types/article'
 
 const schema = yup.object({
@@ -35,12 +41,15 @@ interface ArticleFormProps {
 }
 
 export default function ArticleForm({ article, onSubmit, onCancel, isLoading }: ArticleFormProps) {
+  const [heroImage, setHeroImage] = useState<{ url: string; alt?: string; caption?: string } | null>(
+    article?.heroImage || null
+  )
+  const [imagePickerOpen, setImagePickerOpen] = useState(false)
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
-    watch,
   } = useForm<FormData>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -52,8 +61,6 @@ export default function ArticleForm({ article, onSubmit, onCancel, isLoading }: 
       content: article?.content?.blocks?.[0]?.content || '',
     },
   })
-
-  const contentValue = watch('content')
 
   const handleFormSubmit = async (data: FormData) => {
     // Convert HTML content from TinyMCE to structured format
@@ -73,9 +80,19 @@ export default function ArticleForm({ article, onSubmit, onCancel, isLoading }: 
         type: 'structured' as const,
         blocks: contentBlocks,
       },
+      heroImage: heroImage || undefined,
     }
 
     await onSubmit(submitData as CreateArticleRequest | UpdateArticleRequest)
+  }
+
+  const handleSelectHeroImage = (url: string) => {
+    setHeroImage({ url })
+    setImagePickerOpen(false)
+  }
+
+  const handleRemoveHeroImage = () => {
+    setHeroImage(null)
   }
 
   return (
@@ -136,6 +153,46 @@ export default function ArticleForm({ article, onSubmit, onCancel, isLoading }: 
                 />
               )}
             />
+          </Grid>
+
+          <Grid item xs={12}>
+            <Typography variant="subtitle2" gutterBottom>
+              Hero Image
+            </Typography>
+            {heroImage ? (
+              <Card sx={{ position: 'relative', maxWidth: 600 }}>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={heroImage.url}
+                  alt={heroImage.alt || 'Hero image'}
+                  sx={{ objectFit: 'cover' }}
+                />
+                <Box sx={{ position: 'absolute', top: 8, right: 8 }}>
+                  <IconButton
+                    color="error"
+                    onClick={handleRemoveHeroImage}
+                    sx={{ bgcolor: 'rgba(255, 255, 255, 0.8)' }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Box>
+                <Box sx={{ p: 2 }}>
+                  <Typography variant="caption" color="text.secondary">
+                    {heroImage.url}
+                  </Typography>
+                </Box>
+              </Card>
+            ) : (
+              <Button
+                variant="outlined"
+                startIcon={<ImageIcon />}
+                onClick={() => setImagePickerOpen(true)}
+                sx={{ mb: 2 }}
+              >
+                Select Hero Image
+              </Button>
+            )}
           </Grid>
 
           <Grid item xs={12}>
@@ -205,6 +262,12 @@ export default function ArticleForm({ article, onSubmit, onCancel, isLoading }: 
           </Grid>
         </Grid>
       </Box>
+
+      <ImagePickerDialog
+        open={imagePickerOpen}
+        onClose={() => setImagePickerOpen(false)}
+        onSelect={handleSelectHeroImage}
+      />
     </Paper>
   )
 }

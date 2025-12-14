@@ -1,4 +1,6 @@
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8100/api/v1'
+// Use proxy in dev mode to avoid CORS issues, direct URL in production
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (import.meta.env.DEV ? '/api/v1' : 'http://localhost:8100/api/v1')
 
 export const API_ENDPOINTS = {
   // Auth
@@ -16,6 +18,12 @@ export const API_ENDPOINTS = {
     BY_ID: (id: number) => `/articles/${id}`,
     BY_SLUG: (slug: string) => `/articles/slug/${slug}`,
     SEARCH: '/articles/search',
+  },
+  // Images
+  IMAGES: {
+    BASE: '/images',
+    UPLOAD: '/images/upload',
+    BY_ID: (id: number) => `/images/${id}`,
   },
 } as const
 
