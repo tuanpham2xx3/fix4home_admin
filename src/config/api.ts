@@ -25,5 +25,11 @@ export const API_ENDPOINTS = {
     UPLOAD: '/images/upload',
     BY_ID: (id: number) => `/images/${id}`,
   },
+  // Bookings
+  BOOKINGS: {
+    ADMIN: '/bookings/admin',
+    ADMIN_BY_ID: (id: number) => `/bookings/admin/${id}`,
+    ADMIN_UPDATE_STATUS: (id: number) => `/bookings/admin/${id}/status`,
+  },
 } as const
 

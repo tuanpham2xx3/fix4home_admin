@@ -39,13 +39,12 @@ apiClient.interceptors.request.use(
       console.warn('⚠️ [API INTERCEPTOR] No token available, request will be sent without Authorization header')
     }
     
-    // For FormData, set Content-Type to undefined to let browser add it with boundary
-    // Use undefined instead of delete to avoid affecting the headers object
+    // For FormData, delete Content-Type to let browser add it with boundary
     if (config.data instanceof FormData) {
       if (config.headers) {
-        // Set to undefined instead of delete
-        config.headers['Content-Type'] = undefined as any
-        console.log('📦 [API INTERCEPTOR] FormData detected, Content-Type set to undefined (browser will add boundary)')
+        // Delete Content-Type header completely
+        delete config.headers['Content-Type']
+        console.log('📦 [API INTERCEPTOR] FormData detected, Content-Type deleted (browser will add boundary)')
       }
     }
     

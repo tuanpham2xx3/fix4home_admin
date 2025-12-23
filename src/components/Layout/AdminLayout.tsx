@@ -19,6 +19,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import ArticleIcon from '@mui/icons-material/Article'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import ImageIcon from '@mui/icons-material/Image'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { authApi } from '@/api/auth'
 import toast from 'react-hot-toast'
@@ -29,6 +30,7 @@ const menuItems = [
   { text: 'Dashboard', icon: <DashboardIcon />, path: '/dashboard' },
   { text: 'Articles', icon: <ArticleIcon />, path: '/articles' },
   { text: 'Images', icon: <ImageIcon />, path: '/images' },
+  { text: 'Bookings', icon: <CalendarTodayIcon />, path: '/bookings' },
 ]
 
 export default function AdminLayout() {
@@ -110,6 +112,8 @@ export default function AdminLayout() {
               ? 'Image Management' 
               : location.pathname.startsWith('/articles')
               ? 'Article Management'
+              : location.pathname.startsWith('/bookings')
+              ? 'Booking Management'
               : 'Admin Dashboard'}
           </Typography>
         </Toolbar>
